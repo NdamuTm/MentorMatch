@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch - Add Education</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/setup.css">
+</head>
+<body>
+    <main>
+        <h2>Add Education</h2>
+        <form action="" class="educationForm" id="education-form">
+            <div class="input-group">
+                <label for="school">School:</label>
+                <input type="text" id="school" name="school" required>
+            </div>
+            <div class="input-group">
+                <label for="education-level">Level of education</label>
+                <input type="text" id="education-level" name="education-level" required>
+            </div>
+            <div class="input-group">
+                <label for="field">Field of study</label>
+                <input type="text" id="field" name="field" required>
+            </div>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date" name="start-date" required>
+                </div>
+                <div class="input-group">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date" name="end-date">
+                </div>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="current-education" name="current-education">
+                <label for="current-education">This is my current education</label>
+            </div>
+            <div class="input-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <footer class="nav">
+                <!-- <div class="skip nav-btn secondary">Skip this step</div>
+                <a href="add-skill.html" class="set-up nav-btn primary">Next</a> -->
+                <button class="set-up nav-btn primary" type="submit">Save</button>
+            </footer>
+            
+        </form>
+    </main>
+
+    <script type="module">
+        import { saveEducation } from "./formHandler.js";
+
+        const educationForm = document.getElementById('education-form');
+        educationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const school = document.getElementById('school').value;
+            const educationLevel = document.getElementById('education-level').value;
+            const fieldOfStudy = document.getElementById('field').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const currentEducation = document.getElementById('current-education').checked;
+
+            // Save education details
+            await saveEducation(school, educationLevel, fieldOfStudy, startDate, endDate, currentEducation);
+
+            alert("Education saved!");
+            window.location.href = "add-skill.html";  
+        });
+    </script>
+</body>
+</html>

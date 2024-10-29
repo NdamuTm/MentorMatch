@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/login.css">
+    
+    <script type="module">
+
+        import { auth } from "/Config/firebase.js";
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Get the sign-up form element
+            const signupForm = document.querySelector("form");
+
+            // Add a submit event listener to the form
+            signupForm.addEventListener("submit", async (e) => {
+                e.preventDefault(); // Prevent the form from refreshing the page
+
+                // Retrieve user input from the form fields
+
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                try {
+                    // Attempt to create a new user with Firebase Authentication
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    
+                    // Successful sign-up: Redirect to login page or show a success message
+                    alert("Sign-up successful! Welcome,!");
+                    window.location.href = "/setup";  // Redirect to login page
+                } catch (error) {
+                    // Handle errors
+                    alert("Sign-up failed: " + error.message);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Create an Account</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </header>
+        <div class="login">
+            <form>
+
+                <div class="email">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" placeholder="username@domain.com" required>
+                </div>
+                <div class="password">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="********" required>   
+                </div>
+                
+                <div class="flex">
+                    <div class="remember">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember Me</label>
+                    </div>
+                    <div class="forgot">
+                        <a href="/forgot-password/">Forgot Password?</a>
+                    </div>
+                </div>
+                <button class="btn" type="submit">Sign Up</button>
+                <p>Already have an account? <a href="/Login/">Log In</a></p>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

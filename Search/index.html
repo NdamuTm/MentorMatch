@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/search.css">
+</head>
+<body>
+    <style>
+
+        .suggestions {
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            position: absolute;
+            background: white;
+            z-index: 1000;
+            top: 3rem;
+            border-radius: 1rem;
+
+        }
+        .suggestion {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border-radius: 0.5rem;
+            margin: 10px;
+            box-shadow: 0px 2px 1px rgba(12, 29, 55, 0.18);
+        }
+        .suggestion:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+    <main>
+        <header>
+            <div class="back-btn">
+                <img src="/asset/Images/Back-icon.svg" alt="">
+            </div>
+            <div class="search-input input">
+                <img src="/asset/Images/search-icon2.svg" alt="">
+                <input type="text" placeholder="Search...">
+            </div>
+            <div class="location input" style="position: relative;">
+                <img src="/asset/Images/Location-icon.svg" alt="">
+                <input type="text" id="location-input" placeholder="Joburg" >
+                <div class="suggestions" id="suggestions"></div>
+            </div>
+            
+        </header>
+        <div class="filter horizontal-scroll">
+            <a href="filter.html" class="filter-btn-main">
+                <img src="/asset/Images/Filter-icon.svg" alt="">
+            </a>
+            <div class="filter-btn">
+                <span>Location</span>
+            </div>
+            <div class="filter-btn">
+                <span>Programming</span>
+            </div>
+            <div class="filter-btn designer">
+                <span>Designer</span>
+            </div>
+            <div class="filter-btn">
+                <span>Other</span>
+            </div>
+            <div class="filter-btn">
+                <span>Remote</span>
+            </div>
+        </div>
+        <div class="results">
+            <div class="no-results" id="no-results">
+                <div class="no-results-img">
+                    <img src="/asset/Images/no-results.svg" alt="">
+                </div>
+                <h4>No results found</h4>
+                <p>The search could not be found, please check spelling or write another word.</p>
+                <div class="btn">Search again</div>
+            </div>
+        </div>
+        
+
+
+
+    </main>
+    <footer class="nav">
+        <a class="home-btn nav-btn" href="/">
+            <img src="/asset/Images/home-icon.svg" alt="">
+        </a>
+        <a class="connections-btn nav-btn" href="/connections/">
+            <img src="/asset/Images/Connection-icon.svg" alt="">
+        </a>
+        <a class="add-btn nav-btn" href="/add">
+            <img src="/asset/Images/Add-icon.svg" alt="">
+        </a>
+        <a class="chat-btn nav-btn" href="/chat">
+            <img src="/asset/Images/Chat-icon.svg" alt="">
+        </a>
+        <a class="saved-btn nav-btn" href="/saved">
+            <img src="/asset/Images/Save-icon.svg" alt="">
+        </a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/places.js@latest/lib/places.min.js"></script>
+<script>
+    const placesAutocomplete = places({
+        container: document.getElementById('location-input')
+    });
+
+
+    placesAutocomplete.on('change', function(e) {
+        console.log('Selected location:', e.suggestion); // You can use this value as needed
+    });
+</script>
+<script type="module">
+    import { db } from '/Config/firebase.js';
+    import { collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+
+    const searchInput = document.querySelector('.search-input input');
+    const suggestionsDiv = document.getElementById('suggestions');
+    const noResultsDiv = document.getElementById('no-results');
+
+    searchInput.addEventListener('input', async () => {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+            await searchMentors(searchTerm);
+        } else {
+            suggestionsDiv.innerHTML = ''; // Clear suggestions when input is empty
+            noResultsDiv.style.display = 'none'; // Hide no results message
+        }
+    });
+
+    async function searchMentors(term) {
+        const mentorsRef = collection(db, 'users'); // Adjust 'users' to your collection name
+        const q = query(mentorsRef, where("role", "==", "mentor"), where("fullName", ">=", term), where("fullName", "<=", term + '\uf8ff'));
+
+        const querySnapshot = await getDocs(q);
+        suggestionsDiv.innerHTML = ''; // Clear previous suggestions
+
+        if (querySnapshot.empty) {
+            noResultsDiv.style.display = 'block'; // Show no results message
+        } else {
+            noResultsDiv.style.display = 'none'; // Hide no results message
+            querySnapshot.forEach(doc => {
+                const data = doc.data();
+                const suggestionDiv = document.createElement('div');
+                suggestionDiv.classList.add('suggestion');
+                suggestionDiv.textContent = data.fullName; // Display the mentor's full name
+                suggestionDiv.addEventListener('click', () => {
+                    // Handle click on suggestion (e.g., navigate to mentor profile)
+                    console.log('Mentor selected:', data.fullName);
+                });
+                suggestionsDiv.appendChild(suggestionDiv);
+            });
+            suggestionsDiv.style.display = 'block'; // Show suggestions
+        }
+    }
+</script>
+
+<script src="/asset/js/location.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/add.css">
+    <script type="module" src="/Config/firebase.js"></script> <!-- Ensure this is included -->
+    <style>
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <form id="add-post-form" class="add-post">
+            <header>
+                <a class="back-btn" href="/">
+                    <img src="/asset/Images/Back-icon.svg" alt="">
+                </a>
+                <div class="submit">
+                    <h4><input type="button" class="submit-btn" value="Submit Post" id="submit-btn"></h4>
+                </div>
+            </header>
+            <h3>Add Post</h3>
+            
+            <div class="input-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" placeholder="Write the title of your post here" required>
+            </div>
+
+            <div class="input-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="What do you want to talk about?" required></textarea>
+            </div>
+
+            <div id="hashtag-input" class="input-group hidden">
+                <label for="hashtags">Hashtags (comma separated)</label>
+                <input type="text" id="hashtags" name="hashtags" placeholder="Add hashtags" required>
+            </div>
+
+            <div id="image-input" class="input-group hidden">
+                <label for="image">Upload Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+        </form>
+    </main>
+    <footer class="nav">
+        <button class="flex" id="image-upload">
+            <div class="camera-btn nav-btn">
+                <img src="/asset/Images/Camera-icon.svg" alt="">
+            </div>
+            <div class="photo-btn nav-btn">
+                <img src="/asset/Images/Photo-icon.svg" alt="">
+            </div>
+        </button>
+        <button class="add-tags-btn nav-btn" id="add-tags-btn">
+            Add hashtags
+        </button>
+    </footer>
+
+    <script type="module">
+        import { db, auth } from '../Config/firebase.js'; // Import the Firebase db and auth instance
+        import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js';
+
+        const submitBtn = document.getElementById('submit-btn');
+        const imageUploadBtn = document.getElementById('image-upload');
+        const addTagsBtn = document.getElementById('add-tags-btn');
+        const hashtagInput = document.getElementById('hashtag-input');
+        const imageInput = document.getElementById('image-input');
+
+        // Function to show/hide elements
+        const toggleVisibility = (element) => {
+            element.classList.toggle('hidden');
+        };
+
+        // Event listener to show/hide hashtag input
+        addTagsBtn.addEventListener('click', () => {
+            toggleVisibility(hashtagInput);
+        });
+
+        // Event listener to show/hide image upload input
+        imageUploadBtn.addEventListener('click', () => {
+            toggleVisibility(imageInput);
+        });
+
+        // Submit post event listener
+        submitBtn.addEventListener('click', async () => {
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const hashtags = document.getElementById('hashtags').value.split(',').map(tag => tag.trim());
+            const imageFile = document.getElementById('image').files[0];
+
+            if (title && description && hashtags.length > 0) {
+                try {
+                    let imageUrl = '';
+
+                    // Upload image if one is selected
+                    if (imageFile) {
+                        const storage = getStorage();
+                        const imageRef = ref(storage, `postImages/${imageFile.name}`);
+                        await uploadBytes(imageRef, imageFile);
+                        imageUrl = await getDownloadURL(imageRef); // Get the uploaded image URL
+                    }
+
+                    // Add a new document in the "posts" collection
+                    const docRef = await addDoc(collection(db, 'posts'), {
+                        title: title,
+                        description: description,
+                        hashtags: hashtags,
+                        imageUrl: imageUrl,
+                        createdAt: new Date(),
+                        userId: auth.currentUser.uid // Optional: save the user ID if needed
+                    });
+                    console.log('Post written with ID: ', docRef.id);
+                    // Optionally, clear the form or redirect the user after submission
+                    document.getElementById('add-post-form').reset();
+                    hashtagInput.classList.add('hidden');
+                    imageInput.classList.add('hidden');
+                    alert('Post submitted successfully!');
+                    window.location.href = '/';
+                } catch (e) {
+                    console.error('Error adding document: ', e);
+                    alert('Error submitting post, please try again.');
+                }
+            } else {
+                alert('Please fill out all fields and add at least one hashtag.');
+            }
+        });
+    </script>
+</body>
+</html>

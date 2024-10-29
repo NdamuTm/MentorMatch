@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/account.css">
+</head>
+<body>
+    <main>
+        <header>
+            <div class="top">
+                <div class="flex">
+                    <div class="share-btn">
+                        <img src="/asset/Images/share-icon-white.svg" alt="">
+                    </div>
+                    <div class="settings-btn">
+                        <img src="/asset/Images/settings-icon-white.svg" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="profile">
+                <div class="profile-img mentor-pic">
+                    <img src="/asset/Images/chatting-1.svg" alt="">
+                </div>
+                <div class="name">
+                    <h4 id="profile-name">Ndamulelo Rasendedza</h4>
+                    <span id="profile-location">Limpompo</span>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="followers">
+                    <p id="followers-count">120K</p><span>Followers</span>
+                </div>
+                <div class="following">
+                    <p id="following-count">100K</p><span>Following</span>
+                </div>
+                <div class="edit-profile">
+                    <span>Edit Profile</span>
+                    <img src="/asset/Images/edit-profile-icon.svg" alt="">
+                </div>
+            </div>
+        </header>
+
+        <!-- About Me Section -->
+        <div class="profile-card about-me">
+            <div class="header">
+                <div class="card-icon">
+                    <img src="/asset/Images/about-me-icon.svg" alt="">
+                </div>
+                <h3 class="heading">About Me</h3>
+                <div class="expand-icon">
+                    <img src="/asset/Images/expand-icon.svg" alt="">
+                </div>
+            </div>
+            <hr class="collapsed">
+            <div class="content collapsed">
+                <p id="about-me-content">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Work Experience Section -->
+        <div class="profile-card work-experience">
+            <div class="header">
+                <div class="card-icon">
+                    <img src="/asset/Images/work-experience-icon.svg" alt="">
+                </div>
+                <h3 class="heading">Work Experience</h3>
+                <div class="expand-icon">
+                    <img src="/asset/Images/expand-icon.svg" alt="">
+                </div>
+            </div>
+            <hr class="collapsed">
+            <div class="content collapsed" id="work-experience-content">
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="profile-card education">
+            <div class="header">
+                <div class="card-icon">
+                    <img src="/asset/Images/education-icon.svg" alt="">
+                </div>
+                <h3 class="heading">Education</h3>
+                <div class="expand-icon">
+                    <img src="/asset/Images/expand-icon.svg" alt="">
+                </div>
+            </div>
+            <hr class="collapsed">
+            <div class="content collapsed" id="education-content">
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="profile-card skills ">
+            <div class="header">
+                <div class="card-icon">
+                    <img src="/asset/Images/skills-icon.svg" alt="">
+                </div>
+                <h3 class="heading">Skills</h3>
+                <div class="expand-icon">
+                    <img src="/asset/Images/expand-icon.svg" alt="">
+                </div>
+            </div>
+            <hr class="collapsed">
+            <div class="content flex collapsed" id="skills-content">
+                <div>Loading...</div>
+            </div>
+        </div>
+
+        <!-- Additional Sections ... -->
+
+    </main>
+    <footer class="nav">
+        <a class="home-btn nav-btn" href="/">
+            <img src="/asset/Images/home-icon.svg" alt="">
+        </a>
+        <a class="connections-btn nav-btn" href="/connections/">
+            <img src="/asset/Images/Connection-icon.svg" alt="">
+        </a>
+        <a class="add-btn nav-btn" href="/add">
+            <img src="/asset/Images/Add-icon.svg" alt="">
+        </a>
+        <a class="chat-btn nav-btn" href="/chat">
+            <img src="/asset/Images/Chat-icon.svg" alt="">
+        </a>
+        <a class="saved-btn nav-btn" href="/saved">
+            <img src="/asset/Images/Save-icon.svg" alt="">
+        </a>
+    </footer>
+
+    <script type="module">
+        import { auth, db, onAuthStateChanged } from '/Config/firebase.js';
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+// Function to fetch user data from Firestore
+async function fetchUserData(userId) {
+    const userDoc = doc(db, 'users', userId);
+    const userSnapshot = await getDoc(userDoc);
+
+    if (userSnapshot.exists()) {
+        const data = userSnapshot.data();
+
+        // Populate profile information
+        document.getElementById('profile-name').innerText = data.fullName || "Name not available";
+        document.getElementById('profile-location').innerText = data.location || "Location not available";
+        document.getElementById('about-me-content').innerText = data.aboutMe || "About me not available";
+
+        // Work Experience
+        const workExperienceContent = document.getElementById('work-experience-content');
+        workExperienceContent.innerHTML = '';
+        if (data.workExperience) {
+            const work = data.workExperience;
+            const item = document.createElement('div');
+            item.className = 'work-experience-item';
+            item.innerHTML = `
+                <div class="company-details">
+                    <h4>${work.jobTitle} at ${work.company}</h4>
+                    <p>${work.startDate} - ${work.endDate || 'Present'}</p>
+                    <p>${work.jobDescription || "No description available."}</p>
+                </div>
+            `;
+            workExperienceContent.appendChild(item);
+        } else {
+            workExperienceContent.innerHTML = "<p>No work experience available.</p>";
+        }
+
+        // Education
+        const educationContent = document.getElementById('education-content');
+        educationContent.innerHTML = '';
+        if (data.education) {
+            const edu = data.education;
+            const item = document.createElement('div');
+            item.className = 'education-item';
+            item.innerHTML = `
+                <div class="school-details">
+                    <h4>${edu.school}</h4>
+                    <p>${edu.fieldOfStudy}</p>
+                    <p>${edu.startDate} - ${edu.endDate || 'Present'}</p>
+                    <p>Level: ${edu.educationLevel || "N/A"}</p>
+                </div>
+            `;
+            educationContent.appendChild(item);
+        } else {
+            educationContent.innerHTML = "<p>No education information available.</p>";
+        }
+
+        // Skills
+        const skillsContent = document.getElementById('skills-content');
+        skillsContent.innerHTML = '';
+        if (data.skills && data.skills.skill) {
+            const skillsArray = data.skills.skill.split(','); // Split skills by comma
+            skillsArray.forEach((skill) => {
+                const item = document.createElement('div');
+                item.className = 'skill-item tag';
+                item.innerHTML = `<p>${skill.trim()}</p>`; // Trim whitespace
+                skillsContent.appendChild(item);
+            });
+        } else {
+            skillsContent.innerHTML = "<div>No skills available.</div>";
+        }
+    } else {
+        console.log("No such document!");
+    }
+}
+
+        // Listen for authentication state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const userId = user.uid; // Get user ID
+                fetchUserData(userId); // Fetch user data
+            } else {
+                // User is signed out
+                console.log("No user is signed in.");
+            }
+        });
+    </script>
+
+    <script>
+        // Select all expand icons
+        const expandIcons = document.querySelectorAll('.expand-icon');
+    
+        // Add click event to each expand icon
+        expandIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                // Find the closest .profile-card container
+                const profileCard = this.closest('.profile-card');
+                const content = profileCard.querySelector('.content');
+                const hr = profileCard.querySelector('hr');
+                content.classList.toggle('collapsed');
+                hr.classList.toggle('collapsed');
+            });
+        });
+    </script>
+</body>
+</html>

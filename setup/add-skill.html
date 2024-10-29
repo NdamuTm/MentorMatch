@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/setup.css">
+</head>
+<body>
+    <main>
+        <h2>Add skill</h2>
+        <form action="" class="skillForm" id="skill-form">
+            <div class="input-group">
+                <input type="text" id="skill" name="skill" required>
+            </div>
+            <div class="current-skills">
+                <!-- Existing skills can be shown here -->
+            </div>
+            
+            <footer class="nav">
+                <!-- <div class="skip nav-btn secondary">Skip this step</div>
+                <a href="add-work.html" ></a> -->
+                <button class="set-up nav-btn primary" type="submit">Next</button>
+            </footer>
+        </form>
+    </main>
+    
+    <script type="module">
+        import { saveSkill } from "./formHandler.js";
+
+        const skillsForm = document.getElementById('skill-form');
+        skillsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const skill = document.getElementById('skill').value;
+
+            // Save skill
+            await saveSkill(skill);
+
+            alert("Skill saved!");
+            window.location.href = "add-work.html";  
+        });
+    </script>
+</body>
+</html>

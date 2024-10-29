@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/setup.css">
+</head>
+<body>
+    <main>
+        <h2>About Me</h2>
+        <form action="" class="aboutForm" id="about-form">
+            <div class="full-name input-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" name="full-name" id="full-name" placeholder="John Doe" required>
+            </div>
+            <div class="about-me-group">
+                <textarea name="about-me" id="about-me" placeholder="Tell me about you." 
+                rows="4" maxlength="500" cols="35" required></textarea>
+            </div>
+
+            <div class="profile-pic-group">
+                <label for="profile-pic">Upload Profile Picture:</label>
+                <input type="file" id="profile-pic" name="profile-pic" accept="image/*" required>
+                <img id="preview-pic" style="display:none; width:100px; height:auto; margin-top:10px;" alt="Profile Preview">
+            </div>
+
+            <div class="role-group">
+                <label>Are you a:</label>
+                <div>
+                    <input type="radio" id="mentor" name="role" value="mentor" required>
+                    <label for="mentor">Mentor</label>
+                </div>
+                <div>
+                    <input type="radio" id="student" name="role" value="student" required>
+                    <label for="student">Student</label>
+                </div>
+            </div>
+
+            <footer class="nav">
+                <button class="set-up nav-btn primary" type="submit">Save</button>
+            </footer>
+        </form>
+    </main>
+
+    <script type="module">
+        import { saveAboutMe, uploadProfilePicture, saveRoles } from "./formHandler.js";
+
+        const aboutForm = document.getElementById('about-form');
+        const profilePicInput = document.getElementById('profile-pic');
+        const previewPic = document.getElementById('preview-pic');
+
+        // Preview the uploaded profile picture
+        profilePicInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewPic.src = event.target.result;
+                    previewPic.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        aboutForm.addEventListener('submit', async (e) => {
+
+            e.preventDefault();
+            const aboutMe = document.getElementById('about-me').value;
+            const profilePic = profilePicInput.files[0];
+            const fullName = document.getElementById('full-name').value; // Get full name
+
+            // Get selected role
+            const role = document.querySelector('input[name="role"]:checked')?.value;
+            let profilePicUrl = '';
+            if (profilePic) {
+                profilePicUrl = await uploadProfilePicture(profilePic);
+            }
+
+            // Save about me text and full name
+            await saveAboutMe(aboutMe, fullName);
+
+
+            if (role) {
+                await saveRoles(role);
+            }
+
+            alert("About Me saved!");
+            window.location.href = "add-education.html";  
+        });
+    </script>
+</body>
+</html>

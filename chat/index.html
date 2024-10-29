@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/chat.css">
+</head>
+<body>
+    
+    <main>
+        <div class="no-messages" id="no-messages">
+            <div class="no-messages-img">
+                <img src="/asset/Images/no-messages.svg" alt="">
+            </div>
+            <h4>No messages yet.</h4>
+            <p>Check back later for new messages from mentors.</p>
+            <div class="btn">Create a message</div>
+        </div>
+        <div class="messages">
+            <header>
+                <h3>Messages</h3>
+                <div class="flex">
+                    <div class="create-btn header-btns">
+                        <img src="/asset/Images/create-messages.svg" alt="">
+                    </div>
+                    <div class="menu header-btns">
+                        <img src="/asset/Images/menu-icon.svg" alt="">
+                    </div>
+                </div>
+                
+            </header>
+            <div class="cta search">
+                <div class="search-bar">
+                    <form action="">
+                        <input type="text" name="search" placeholder="Search messages"><button type="submit" class="search-icon"><img src="/asset/Images/Icon Search.svg" alt=""></button>
+                    </form>
+                </div>
+            </div>
+            <div class="message-list">
+                <a href="user/" class="message-item">
+                    <div class="message-user-img">
+                        <img src="/asset/Images/chat-1.png" alt="">
+                    </div>
+                    <div class="message-user-content">
+                        <h4>Andy Robertson</h4>
+                        <p class="unread">Oh yes, please send your CV/Resume</p>
+                    </div>
+                    <div class="message-timeline">
+                        
+                        <p >5m ago</p>
+                        <span>2</span>
+
+                    </div>
+                </a>
+                <a href="user/" class="message-item">
+                    <div class="message-user-img">
+                        <img src="/asset/Images/chat-2.svg" alt="">
+                    </div>
+                    <div class="message-user-content">
+                        <h4>Giorgio Chiellini</h4>
+                        <p>Hello sir, Good Morning</p>
+                    </div>
+                    <div class="message-timeline">
+                        
+                        <p>30m ago</p>
+                        <!-- <span>2</span> -->
+
+                    </div>
+                </a>
+                
+                
+            </div>
+        </div>
+
+
+
+    </main>
+    <footer class="nav">
+        <a class="home-btn nav-btn" href="/">
+            <img src="/asset/Images/home-icon.svg" alt="">
+        </a>
+        <a class="connections-btn nav-btn" href="/connections/">
+            <img src="/asset/Images/Connection-icon.svg" alt="">
+        </a>
+        <a class="add-btn nav-btn" href="/add">
+            <img src="/asset/Images/Add-icon.svg" alt="">
+        </a>
+        <div class="chat-btn nav-btn" href="/chat">
+            <img src="/asset/Images/chat-icon-active.svg" alt="">
+        </div>
+        <a class="saved-btn nav-btn" href="/saved">
+            <img src="/asset/Images/Save-icon.svg" alt="">
+        </a>
+    </footer>
+</body>
+</html>

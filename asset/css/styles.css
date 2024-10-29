@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body,html{
+    width: 100vw !important;
+    height: 100vh !important;
+    overflow-x: hidden !important;
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
+}
+body::-webkit-scrollbar{
+
+    display: none;
+}
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, h4, h5, h6{
+
+    color: #0d0140;
+}
+p{
+    font-size: 14px;
+    color: #524B6B;
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+label{
+    font-size: 16px;
+    color: #0d0140;
+    font-weight: 600;
+}
+
+input,textarea{
+    background: white;
+    border: none;
+    padding: 1.3rem;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.btn{
+    background: #130160;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    width: max-content;
+    width: 20rem;
+    margin: 0 auto;
+    text-decoration: none;
+    text-align: center;
+}
+
+.remember,.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: start;
+}
+
+input[type="checkbox"] {
+
+    appearance: none; 
+    border-radius: 4px; 
+    position: relative;
+    cursor: pointer;
+    background-color: #e6e1ff; 
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    padding: .7rem;
+    margin: 0;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #0d0140; /* Background color when checked */
+
+}
+
+input[type="checkbox"]:checked::before {
+    /* Checkmark */
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+label {
+    font-size: 16px;
+    cursor: pointer;
+
+}
+
+
+.btn-light{
+    background: #d6cdfe !important;
+    margin-top: 1rem;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}

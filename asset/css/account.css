@@ -1,0 +1,177 @@
+header{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin: -1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: #130160;  
+    background-image:
+        url("/asset/Images/background.svg");
+    background-size: auto;
+    background-position: 50% 45%;
+    background-repeat: no-repeat;
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    box-shadow: 0px 4px 62px rgba(153, 171, 198, 0.18);
+    
+}
+
+header *{
+    color: #fff;
+    gap: 1rem;
+}
+
+.bottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+header .flex{
+    justify-content: end;
+}
+
+.profile img{
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    margin-bottom: .5rem;
+    margin-top: -1.5rem;
+}
+
+.profile h4{
+    margin: 0;
+    font-weight: 500;
+}
+header span{
+    font-size: 12px;
+}
+header .bottom div{
+    display: flex;
+    gap: .1rem;
+    align-items: end;
+}
+
+
+.bottom p{
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.edit-profile{
+    background: #ffffff27;
+    padding: .5rem;
+    border-radius: .2rem;
+}
+
+.edit-profile img{
+    width: 1.2rem;
+}
+
+.profile-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0px 4px 62px rgba(153, 171, 198, 0.18);
+    margin-bottom: 1rem;
+    gap: 1rem;
+    
+}
+
+.profile-card .header{
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.profile-card .header  .expand-icon{
+    flex: 1;
+    text-align: right;
+}
+
+.profile-card .header .expand-icon img{
+    background: rgb(255, 158, 135,20%);
+    border-radius: 100%;
+    padding: .4rem;
+    width: .8rem;
+    height: .8rem;
+}
+
+.profile-card .header .card-icon img{
+    width: 1.3rem;
+}
+
+.profile-card .header .card-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h3{
+    font-size: 15px;
+}
+
+.profile-card hr{
+    margin: 1rem 0;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.content h3,h4{
+    font-size: 14px;
+    margin-bottom: .4rem;
+}
+
+.content p{
+    font-size: 13px;
+    margin-bottom: .1rem;
+}
+
+.tag{
+    background: rgb(203, 201, 212,.20);
+    padding: .5rem 1rem;
+    border-radius: .2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tag p{
+    margin: 0;
+    color: #524B6B;
+}
+.content.flex{
+    flex-wrap: wrap;
+}
+
+
+.resume .pdf{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pdf h6{
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: .3rem;
+}
+.pdf .date{
+    font-size: 13px;
+    color: #524B6B;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+
+
+.profile-card .collapsed {
+    display: none;
+}
+
+.profile-card .content {
+    transition: max-height 0.3s ease-out;
+}

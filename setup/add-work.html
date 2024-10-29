@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch - Add Work Experience</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/setup.css">
+</head>
+<body>
+    <main>
+        <h2>Add Work Experience</h2>
+        <form action="" class="workForm" id="work-form">
+            <div class="input-group">
+                <label for="company">Company:</label>
+                <input type="text" id="company" name="company" required>
+            </div>
+            <div class="input-group">
+                <label for="position">Position:</label>
+                <input type="text" id="position" name="position" required>
+            </div>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date" name="start-date" required>
+                </div>
+                <div class="input-group">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date" name="end-date">
+                </div>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="current-position" name="current-position">
+                <label for="current-position">This is my position now</label>
+            </div>
+            <div class="input-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+            <footer class="nav">
+                <!-- <div class="skip nav-btn secondary">Skip this step</div>
+                <a href="add-education.html" >Next</a> -->
+                <button class="set-up nav-btn primary" type="submit">Save</button>
+            </footer>
+            
+        </form>
+    </main>
+    
+
+    <script type="module">
+        import { saveWorkExperience } from "./formHandler.js";
+
+        const workExperienceForm = document.getElementById('work-form');
+        workExperienceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const jobTitle = document.getElementById('position').value;
+            const company = document.getElementById('company').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const jobDescription = document.getElementById('description').value;
+
+            const workData = {
+                jobTitle,
+                company,
+                startDate,
+                endDate,
+                jobDescription
+            };
+
+            // Save work experience
+            await saveWorkExperience(workData);
+
+            alert("Work Experience saved!");
+            window.location.href = "/account";  
+        });
+    </script>
+</body>
+</html>

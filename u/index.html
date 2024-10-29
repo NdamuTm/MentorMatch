@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorMatch</title>
+    <link rel="stylesheet" href="/asset/css/styles.css">
+    <link rel="stylesheet" href="/asset/css/home.css">
+    <link rel="stylesheet" href="/asset/css/mentor.css">
+
+</head>
+<body>
+ 
+    <main >
+        <header>
+            <div class="flex">
+                <div class="back-btn">
+                    <img src="/asset/Images/Back-icon.svg" alt="">
+                </div>
+                <div class="options">
+                    <img src="/asset/Images/menu-icon.svg" alt="">
+                </div>
+            </div>
+            <div class="follow-btns">
+                <button class="btn"><img src="/asset/Images/follow.svg" alt=""> Follow</button>
+                <span></span>
+                <span></span>
+                <button class="btn"><img src="/asset/Images/website.svg" alt=""> Visit website</button>
+            </div>
+            <div class="profile">
+                <div class="profile-img mentor-pic" id="profile-img">
+                    <img src="/asset/Images/chatting-1.svg" alt="">
+                </div>
+                <div class="profile-info">
+                    <h3>Loading...</h3>
+                </div>
+                <div class="info">
+                    <p class="company">Loading...</p>
+                    <p> • </p>
+                    <p class="location">Loading...</p>
+                    <p> • </p>
+                    <p class="followers">Loading...</p>
+                    <p> • </p>
+                    <p class="status">Loading...</p>
+                </div>
+            </div>
+            
+        </header>
+        <div class="header-btns">
+            <button class="btn btn-active" onclick="showContent('about-me')" >About me</button>
+            <button class="btn" onclick="showContent('posts')">Posts</button>
+            <button class="btn" onclick="showContent('schedule')">Schedule</button>
+        </div>
+
+        <div class="content about-me active" id="about-me">
+            <div class="about">
+                <h4>About John Doe</h4>
+                <p>Loading...</p>
+            </div>
+            <div class="website">
+                <h4>Website</h4>
+                <p>Loading...</p>
+            </div>
+            <div class="industry">
+                <h4>Industry</h4>
+                <p>Technology</p>
+            </div>
+            <div class="contact">
+                <h4>Contact</h4>
+                <p>Email: Loading...</p>
+                <p>Phone: Loading...</p>
+            </div>
+            <div class="type">
+                <h4>Type</h4>
+                <p>Loading...</p>
+            </div>
+            <div class="languages">
+                <h4>Languages</h4>
+                <p>English, Spanish, French</p>
+            </div>
+            <div class="education">
+                <h4>Education</h4>
+                <p>Loading...</p>
+            </div>
+            <div class="experience">
+                <h4>Experience</h4>
+                <p>Loading...</p>
+            </div>
+            <div class="skills">
+                <h4>Skills</h4>
+                <p>Loading...</p>
+            </div>
+        </div>
+        <div class="content posts" id="posts">
+            Loading...
+        </div>
+        <div class="content schedule" id="schedule">
+    
+            <div class="session">
+               Loading...
+        </div>
+
+    </main>
+    <footer class="nav">
+        <div class="nav-btn share">
+            <img src="/asset/Images/share-icon.svg" alt="">
+        </div>
+        <div class="nav-btn message">
+            <span>Message</span>
+        </div>
+    </footer>
+    <script type="module">
+        import { db,firebaseConfig,app } from '/Config/firebase.js';
+        import { doc, getDoc,getFirestore,collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-storage.js";
+
+        // Function to fetch posts from Firestore
+        async function fetchUserPosts(userId) {
+            try {
+                const postsRef = collection(db, 'posts');
+                const q = query(postsRef, where("userId", "==", userId));
+                const querySnapshot = await getDocs(q);
+
+                let postsHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const postData = doc.data();
+                    postsHTML += `
+                        <div class="post">
+                            <div class="flex">
+                                <div class="post-img">
+                                    <img src="${postData.imageUrl}" alt="">
+                                </div>
+                                <div class="post-details">
+                                    <h3>${postData.title}</h3>
+                                    <p>${postData.createdAt.toDate().toLocaleString()}</p>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                <p>${postData.description}</p>
+                                <p>Hashtags: ${postData.hashtags.join(", ")}</p>
+                            </div>
+                            <div class="react">
+                                <div class="like"><img src="/asset/Images/like.svg" alt=""> 23</div>
+                                <div class="comment"><img src="/asset/Images/comment.svg" alt=""> 12</div>
+                                <div class="share"><img src="/asset/Images/share.svg" alt=""> 5</div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.querySelector('#posts').innerHTML = postsHTML;
+            } catch (error) {
+                console.error("Error fetching posts:", error);
+            }
+        }
+
+        async function fetchUserSchedule(userId) {
+            try {
+                const scheduleRef = collection(db, 'schedule');
+                const q = query(scheduleRef, where("userId", "==", userId));
+                const querySnapshot = await getDocs(q);
+
+                let scheduleHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const sessionData = doc.data();
+                    scheduleHTML += `
+                        <div class="session">
+                            <h4>Date: ${sessionData.date}</h4>
+                            <p><strong>Time:</strong> ${sessionData.startTime} - ${sessionData.endTime}</p>
+                            <p><strong>Mentor:</strong> ${sessionData.mentor}</p>
+                            <p><strong>Topic:</strong> ${sessionData.topic}</p>
+                            <p><strong>Location:</strong> ${sessionData.location}</p>
+                            <p><strong>Notes:</strong> ${sessionData.notes}</p>
+                        </div>
+                    `;
+                });
+
+                document.querySelector('#schedule').innerHTML = scheduleHTML;
+            } catch (error) {
+                console.error("Error fetching schedule:", error);
+            }
+        }
+
+         
+        function getUserIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
+            return userId;
+        }
+    
+        // Fetch user data from Firebase
+        async function fetchUserData(userId) {
+            try {
+                const userDocRef = doc(db, 'users', userId);
+                const userDoc = await getDoc(userDocRef);
+    
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    displayUserData(userData);
+                } else {
+                    console.log("No such user!");
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        }
+        
+    
+        // Function to display user data on the page
+        function displayUserData(data) {
+            // Set Profile Image if Available
+            if (data.profilePic) {
+                document.querySelector('.profile-img img').src = data.profilePic;
+            }
+            // Profile Information
+            document.querySelector('.profile-info h3').textContent = data.fullName || 'N/A';
+            document.querySelector('.company').textContent = data.company || 'N/A';
+            document.querySelector('.location').textContent = data.location || 'N/A';
+            document.querySelector('.followers').textContent = `${data.followers || 0} Followers`;
+            document.querySelector('.status').textContent = data.status || 'offline';
+    
+            // About Section
+            document.querySelector('.about p').textContent = data.aboutMe || 'No description available.';
+            document.querySelector('.website p').textContent = data.website || 'No website available.';
+            document.querySelector('.industry p').textContent = data.industry || 'No industry specified.';
+            document.querySelector('.contact').innerHTML = `
+                <h4>Contact</h4>
+                <p>Email: ${data.email || 'N/A'}</p>
+                <p>Phone: ${data.phone || 'N/A'}</p>
+            `;
+            document.querySelector('.type p').textContent = data.role || 'N/A';
+            document.querySelector('.languages p').textContent = data.languages || 'No languages specified.';
+
+
+            // Populate education
+            const educationSection = document.querySelector(".education");
+            educationSection.innerHTML = `
+                <h4>Education</h4>
+                <p>${data.education?.school || "Not available"}, ${data.education?.fieldOfStudy || "N/A"} (${data.education?.startDate || "N/A"} - ${data.education?.endDate || "N/A"})</p>
+            `;
+
+            // Populate work experience
+            const experienceSection = document.querySelector(".experience");
+            experienceSection.innerHTML = `
+                <h4>Experience</h4>
+                <p>${data.workExperience?.jobTitle || "N/A"} at ${data.workExperience?.company || "N/A"} (${data.workExperience?.startDate || "N/A"} - ${data.workExperience?.endDate || "N/A"})</p>
+                <p>${data.workExperience?.jobDescription || "No job description available"}</p>
+            `;
+
+            // Populate skills
+            document.querySelector(".skills p").innerText = data.skills?.skill || "No skills available";
+    
+            // Set Profile Image if Available
+            if (data.profilePic) {
+                document.querySelector('.profile-img img').src = data.profilePic;
+            }
+    
+            // Display Follow Count
+            document.querySelector('.followers').textContent = `${data.followers?.length || 0} Followers`;
+        }
+    
+        // Initialize Page
+        const userId = getUserIdFromUrl();
+        if (userId) {
+            fetchUserData(userId);
+            fetchUserPosts(userId);
+            fetchUserSchedule(userId);
+        } else {
+            console.error("User ID not found in URL.");
+        }
+
+    </script>
+
+    
+    
+    <script>
+        function showContent(contentId) {
+
+            var contents = document.getElementsByClassName('content');
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].style.display = 'none';
+            }
+
+            var buttons = document.getElementsByClassName('btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('btn-active');
+            }
+
+            
+            document.getElementById(contentId).style.display = 'block';
+            event.currentTarget.classList.add('btn-active');
+            if (contentId=='connections'){
+                document.getElementById(contentId).style.display = 'grid';
+            }
+        }
+    </script>
+        
+        
+        
+</body>
+</html>
