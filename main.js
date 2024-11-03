@@ -2,8 +2,8 @@
 
 // Import Firebase authentication functions
 import { signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { auth, onAuthStateChanged } from "/Config/firebase.js";
-
+import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { auth, db, onAuthStateChanged } from "/Config/firebase.js";
 // Track the current user's authentication state
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -26,8 +26,6 @@ async function logoutUser() {
 }
 
 // main.js
-import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
-import { db } from '/Config/firebase.js'; // Ensure you're importing your Firestore instance
 
 const postsContainer = document.getElementById('posts');
 
@@ -76,44 +74,49 @@ async function fetchPosts() {
 }
 // Function to fetch and display mentors from Firestore
 async function fetchMentors() {
-    try {
-        const querySnapshot = await getDocs(collection(db, 'mentors'));
-        let mentorsHTML = '';
+    const mentorsContainer = document.getElementById('mentors');
+    const mentorsRef = collection(db, 'users'); // Assuming 'users' is the collection name
+    const q = query(mentorsRef, where('role', '==', 'mentor')); // Query to filter by role
+    const querySnapshot = await getDocs(q);
 
-        querySnapshot.forEach((doc) => {
-            const mentorData = doc.data();
-            mentorsHTML += `
-                <div class="mentor slider-item">
-                    <div class="flex">
-                        <div class="mentor-img">
-                            <img src="${mentorData.imageUrl || '/asset/Images/default-mentor-image.svg'}" alt="">
-                        </div>
-                        <div class="mentor-details">
-                            <h3>${mentorData.name}</h3>
-                            <p>${mentorData.subjects.join(' • ') || 'No subjects listed'}</p>
-                        </div>
-                        <div class="save">
-                            <img src="/asset/Images/Save.svg" alt=""> Follow
-                        </div>
-                    </div>
-                    <div class="tags">
-                        ${mentorData.experience ? `<p><img src="/asset/Images/tick.svg"> ${mentorData.experience}</p>` : ''}
-                        ${mentorData.location ? `<p><img src="/asset/Images/tick.svg"> Location: ${mentorData.location}</p>` : ''}
-                        ${mentorData.availability ? `<p><img src="/asset/Images/tick.svg"> Availability: ${mentorData.availability}</p>` : ''}
-                    </div>
-                    <div class="buttons">
-                        <button class="btn btn-lite">Connect</button>
-                        <button class="btn">Message</button>
-                    </div>
+    // Clear the mentors container before adding new elements
+    mentorsContainer.innerHTML = '';
+
+    querySnapshot.forEach((doc) => {
+        const mentorData = doc.data();
+        const mentorElement = document.createElement('a');
+        mentorElement.href = `/u/?id=${mentorData.uid}`; 
+        mentorElement.className = 'mentor slider-item';
+        mentorElement.innerHTML = `
+
+            <div class="flex">
+                <div class="mentor-img">
+                    <img src="${mentorData.profilePic || 'default-image-path.jpg'}" alt=""> <!-- Replace with the correct image URL -->
                 </div>
-            `;
-        });
+                <div class="mentor-details">
+                    <h3>${mentorData.fullName}</h3>
+                    <p>${mentorData.education.fieldOfStudy || 'No field of study'} • ${mentorData.education.school || 'No school specified'}</p>
+                </div>
+                <div class="save">
+                    <img src="asset/Images/Save.svg" alt=""> Follow
+                </div>
+            </div>
+            <div class="tags">
+                <p><img src="asset/Images/tick.svg"> Skills: ${mentorData.skills.skill || 'No skills listed'}</p>
+                <p><img src="asset/Images/tick.svg"> Experience: ${mentorData.workExperience.jobTitle || 'No job title specified'}</p>
+                <p><img src="asset/Images/tick.svg"> Location: ${mentorData.location || 'Location Not Specified'}</p>
+                <p><img src="asset/Images/tick.svg"> Availability: ${mentorData.availability || 'Not specified'}</p>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-lite">Connect</button>
+                <button class="btn">Message</button>
+            </div>
 
-        mentorsContainer.innerHTML = mentorsHTML; // Insert the generated HTML into the container
-    } catch (error) {
-        console.error('Error fetching mentors: ', error);
-    }
+        `;
+        mentorsContainer.appendChild(mentorElement);
+    });
 }
+
 
 // Call the fetch functions to load the posts and mentors when the page is loaded
 fetchPosts();
