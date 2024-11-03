@@ -1,0 +1,63 @@
+*{
+    font-family: "DM Sans", sans-serif;
+}
+
+
+body{
+    padding-block: 1rem;
+}
+
+main{
+    padding: 1rem;
+    padding-top: 3rem;
+}
+
+header{
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+h1{
+    font-size: 2rem;
+    color: #0d0140;
+}
+p{
+    color: #524b6b;
+    font-size: 14px;
+    margin-block: 1rem;
+    text-align: center;
+}
+
+.login{
+    margin-top: 3rem;
+}
+
+.email,.password,.flex,.full-name{
+    display: flex;
+    gap: .6rem;
+}
+
+.email,.password,.full-name{
+    flex-direction: column;
+
+}
+
+div input{
+    box-shadow: 0px 4px 62px 0px rgba(13, 1, 64, 0.068);
+}
+
+a{
+    color: #ff9228;
+}
+
+.flex{
+    margin-bottom: 2rem;
+    justify-content: space-between;
+}
+
+
+.forgot-password-img{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+}

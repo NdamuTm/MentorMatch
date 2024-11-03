@@ -1,0 +1,46 @@
+
+.submit .submit-btn,.add-tags-btn{
+    padding: 0;
+    background: 0;
+    color: #FF9228;
+    font-weight: 600;
+}
+.add-post h3{
+    color: #150B3D;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.add-post .input-group{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+footer{
+    justify-content: space-between;
+    padding-inline: 1rem;
+
+}
+.nav-btn img{
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.add-tags-btn{
+    margin-right: 2rem;
+}
+main{
+    background: #F9F9F9;
+}
+
+
+.hidden{
+    display: none;
+}
+
+button{
+    border: none;
+    background: none;
+    cursor: pointer;
+}

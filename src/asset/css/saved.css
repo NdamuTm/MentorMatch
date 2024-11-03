@@ -1,0 +1,15 @@
+.no-saved{
+    display: none;   /* use flex  */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 2rem;
+    text-align: center;
+}
+
+.no-saved p{
+    width: 70%;
+}
+
+

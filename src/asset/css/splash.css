@@ -1,0 +1,47 @@
+*{
+    font-family: "DM Sans", sans-serif;
+}
+body{
+    background: #f9f9f9;
+    padding-block: 1rem;
+}
+
+main{
+    padding: 2rem !important;
+}
+
+.top{
+    text-align: right;
+}
+
+.splash-img img{
+    width: 20rem;
+    height: 20rem;
+    margin-block: 3rem ;
+}
+
+.headings{
+    font-size: 20px;
+}
+span{
+    color: #fca34d;
+    text-decoration: underline;
+}
+
+.continue{
+    background: #130160;
+    width: 2rem !important;
+    padding: 1rem;
+    margin: 0 !important;
+    border-radius: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+}
+
+.bottom{
+    display: flex;
+    justify-content: right;
+    margin-top: .3rem;
+}
